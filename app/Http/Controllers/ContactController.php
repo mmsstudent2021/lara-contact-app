@@ -5,7 +5,10 @@ namespace App\Http\Controllers;
 use App\Http\Requests\StoreContactRequest;
 use App\Http\Requests\UpdateContactRequest;
 use App\Models\Contact;
+use App\Models\User;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+
 
 class ContactController extends Controller
 {
@@ -85,5 +88,27 @@ class ContactController extends Controller
     public function destroy(Contact $contact)
     {
         //
+    }
+
+    public function bulkShare(Request $request){
+
+        return redirect()->route('contact.index');
+    }
+
+    public function bulkAction(Request $request){
+
+//        return $request;
+        if($request->functionality == 1){
+
+            $user = User::where("email",$request->email)->first();
+            $userId = $user->id;
+            Contact::whereIn("id",$request->contact_ids)
+                ->update(["user_id" => $userId]);
+        }elseif($request->functionality == 2){
+            Contact::destroy(join(',',$request->contact_ids));
+        }else{
+            return  abort(403);
+        }
+        return redirect()->back();
     }
 }
