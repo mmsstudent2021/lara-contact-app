@@ -25,6 +25,7 @@ Auth::routes();
 
 Route::middleware("auth")->group(function (){
     Route::get('/home', [HomeController::class, 'index'])->name('home');
+    Route::resource("/shared-contact",\App\Models\SharedContact::class);
     Route::resource("/contact",ContactController::class);
     Route::post("/contact-bulk-action",[ContactController::class,'bulkAction'])->name("contact.bulkAction");
     Route::post("/contact-bulk-share",[ContactController::class,'bulkShare'])->name("contact.bulkShare");

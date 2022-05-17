@@ -75,9 +75,13 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                <div class="">
+                <div class="mb-3">
                     <label class="form-label" for="">Recipient Email</label>
                     <input type="text" name="email" form="bulk_action" class="form-control">
+                </div>
+                <div class="">
+                    <label class="form-label" for="">Recipient Email</label>
+                    <textarea name="message" class="form-control" form="bulk_action" cols="30" rows="7"></textarea>
                 </div>
             </div>
             <div class="modal-footer">
