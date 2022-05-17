@@ -5,7 +5,9 @@ namespace App\Http\Controllers;
 use App\Http\Requests\StoreContactRequest;
 use App\Http\Requests\UpdateContactRequest;
 use App\Models\Contact;
+use App\Models\SharedContact;
 use App\Models\User;
+use App\Notifications\ContactShareNoti;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -97,11 +99,21 @@ class ContactController extends Controller
 
     public function bulkAction(Request $request){
 
-//        return $request;
+
         if($request->functionality == 1){
 
             $user = User::where("email",$request->email)->first();
-            $userId = $user->id;
+            $sharedContact = new SharedContact();
+            $sharedContact->from = Auth::id();
+            $sharedContact->to = $user->id;
+            $sharedContact->contact_ids = json_encode($request->contact_ids);
+            $sharedContact->message = $request->message;
+            $sharedContact->save();
+
+            $user->notify(new ContactShareNoti($request->message,route('shared-contact.show',$sharedContact->id)));
+
+            return $request;
+
             Contact::whereIn("id",$request->contact_ids)
                 ->update(["user_id" => $userId]);
         }elseif($request->functionality == 2){

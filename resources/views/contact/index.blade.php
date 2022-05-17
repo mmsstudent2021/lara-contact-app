@@ -79,6 +79,10 @@
                     <label class="form-label" for="">Recipient Email</label>
                     <input type="text" name="email" form="bulk_action" class="form-control">
                 </div>
+                <div class="">
+                    <label class="form-label" for="">Message</label>
+                    <textarea name="message" form="bulk_action" class="form-control" id="" cols="30" rows="7"></textarea>
+                </div>
             </div>
             <div class="modal-footer">
                 <button type="button" onclick="cancelAction()"  class="btn btn-secondary">Close</button>
@@ -94,7 +98,9 @@
         <script>
 
             let emailModal = document.querySelector("#emailModal");
-            let myEmailModal =new bootstrap.Modal(emailModal);
+            let myEmailModal =new bootstrap.Modal(emailModal,{
+                backdrop : "static"
+            });
 
             let contactBulkFunctionalitySelect = document.querySelector(`[name="functionality"]`);
             contactBulkFunctionalitySelect.addEventListener("change",function (){

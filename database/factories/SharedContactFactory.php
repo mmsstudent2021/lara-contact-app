@@ -5,9 +5,9 @@ namespace Database\Factories;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
- * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Contact>
+ * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\SharedContact>
  */
-class ContactFactory extends Factory
+class SharedContactFactory extends Factory
 {
     /**
      * Define the model's default state.
@@ -17,9 +17,7 @@ class ContactFactory extends Factory
     public function definition()
     {
         return [
-            "name" => $this->faker->name,
-            "phone" => $this->faker->phoneNumber,
-            "user_id" => rand(1,13)
+            //
         ];
     }
 }
