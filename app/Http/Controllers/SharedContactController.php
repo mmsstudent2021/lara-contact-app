@@ -7,6 +7,7 @@ use App\Http\Requests\UpdateSharedContactRequest;
 use App\Models\Contact;
 use App\Models\SharedContact;
 use App\Models\User;
+use Illuminate\Support\Facades\Auth;
 
 class SharedContactController extends Controller
 {
@@ -49,6 +50,9 @@ class SharedContactController extends Controller
      */
     public function show(SharedContact $sharedContact)
     {
+        if($sharedContact->status){
+            return abort(404);
+        }
         $from = User::find($sharedContact->from);
         $to = User::find($sharedContact->to);
         $contacts = Contact::whereIn("id",json_decode($sharedContact->contact_ids))->get();
@@ -75,7 +79,14 @@ class SharedContactController extends Controller
      */
     public function update(UpdateSharedContactRequest $request, SharedContact $sharedContact)
     {
-        //
+        if($request->action === 'accept'){
+            Contact::whereIn("id",json_decode($sharedContact->contact_ids))
+                ->update(["user_id" => Auth::id()]);
+        }
+        $sharedContact->status = $request->action;
+        $sharedContact->update();
+
+        return redirect()->route('contact.index');
     }
 
     /**

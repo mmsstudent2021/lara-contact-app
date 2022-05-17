@@ -27,14 +27,39 @@
                         @endforelse
                     </ul>
 
+
+
+                    @if(auth()->id() === $sharedContact->from)
+                        <div class="my-3">
+                            <form method="post" action="{{ route('shared-contact.update',$sharedContact->id) }}">
+                                @method('put')
+                                @csrf
+                                <input type="hidden" name="action" value="cancel">
+                                <button class="btn btn-danger">
+                                    Cancel
+                                </button>
+                            </form>
+                        </div>
+                    @else
                     <div class="my-3">
-                        <a href="" class="btn btn-outline-primary">
-                            Reject
-                        </a>
-                        <a href="" class="btn btn-primary">
-                            Accept
-                        </a>
+                        <form method="post" class="d-inline" action="{{ route('shared-contact.update',$sharedContact->id) }}">
+                            @method('put')
+                            @csrf
+                            <input type="hidden" name="action" value="reject">
+                            <button class="btn btn-outline-primary">
+                                Reject
+                            </button>
+                        </form>
+                        <form method="post" class="d-inline" action="{{ route('shared-contact.update',$sharedContact->id) }}">
+                            @method('put')
+                            @csrf
+                            <input type="hidden" name="action" value="accept">
+                            <button class="btn btn-primary">
+                                Accept
+                            </button>
+                        </form>
                     </div>
+                    @endif
 
                 </div>
             </div>

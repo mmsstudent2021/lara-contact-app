@@ -6,6 +6,7 @@ use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
+use Illuminate\Support\Facades\Auth;
 
 class ContactShareNoti extends Notification
 {
@@ -34,7 +35,7 @@ class ContactShareNoti extends Notification
      */
     public function via($notifiable)
     {
-        return ['mail'];
+        return ['mail','database'];
     }
 
     /**
@@ -60,7 +61,9 @@ class ContactShareNoti extends Notification
     public function toArray($notifiable)
     {
         return [
-            //
+            "message"=>$this->message,
+            "title" => "Share contact from ".Auth::user()->name,
+            "url" => $this->url
         ];
     }
 }
