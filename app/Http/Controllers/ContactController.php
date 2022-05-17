@@ -5,12 +5,9 @@ namespace App\Http\Controllers;
 use App\Http\Requests\StoreContactRequest;
 use App\Http\Requests\UpdateContactRequest;
 use App\Models\Contact;
-use App\Models\SharedContact;
 use App\Models\User;
-use App\Notifications\ContactNotfication;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Notification;
 
 
 class ContactController extends Controller
@@ -100,20 +97,13 @@ class ContactController extends Controller
 
     public function bulkAction(Request $request){
 
-
 //        return $request;
         if($request->functionality == 1){
 
-            $toUser = User::where("email",$request->email)->first();
-            $sc = new SharedContact();
-            $sc->from=Auth::id();
-            $sc->to = $toUser->id;
-            $sc->contact_ids = json_encode($request->contact_ids);
-            return $sc;
-            $sc->save();
-            $toUser->notify(new ContactNotfication($request->message,$sc->id));
-
-
+            $user = User::where("email",$request->email)->first();
+            $userId = $user->id;
+            Contact::whereIn("id",$request->contact_ids)
+                ->update(["user_id" => $userId]);
         }elseif($request->functionality == 2){
             Contact::destroy(join(',',$request->contact_ids));
         }else{
